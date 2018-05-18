@@ -13,16 +13,17 @@ Options:
 from markdown import markdown
 import pdfkit
 from docopt import docopt
+import os
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
-    in_file = opts['-i']
-    out_file = opts['-o']
+    cwd = os.getcwd()
+    in_file = os.path.join(cwd, opts['-i'])
 
-    if in_file is None:
-        in_file = 'guion.md'
-    if out_file is None:
-        out_file = in_file.split('.')[0] + '.pdf'
+    if opts['-o'] is not None:
+        out_file = os.path.join(cwd, opts['-o'])
+
+    out_file = in_file.split('.')[0] + '.pdf'
 
     with open(in_file, 'r') as f:
         html_text = markdown(f.read(), output_format='html4')
